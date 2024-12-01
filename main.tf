@@ -74,12 +74,13 @@ resource "azurerm_mssql_server" "sql_server" {
 
   tags = local.tags
 }
+
 resource "azurerm_mssql_database" "example" {
-  name                = "exampledb"
-  server_id           = azurerm_mssql_server.sql_server.id
-  sku_name            = "Basic" 
-  collation           = "SQL_Latin1_General_CP1_CI_AS"
-  max_size_gb         = 2
+  name        = "exampledb"
+  server_id   = azurerm_mssql_server.sql_server.id
+  sku_name    = "Basic"
+  collation   = "SQL_Latin1_General_CP1_CI_AS"
+  max_size_gb = 2
 
   tags = local.tags
 }
