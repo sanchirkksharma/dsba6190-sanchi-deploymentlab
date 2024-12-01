@@ -45,7 +45,7 @@ resource "azurerm_subnet" "snet" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "sto-${var.student_name}-${random_integer.deployment_id_suffix.result}"
+  name                     = "sto${var.student_name}${random_integer.deployment_id_suffix.result}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = var.location
   account_tier             = "Standard"
@@ -53,7 +53,15 @@ resource "azurerm_storage_account" "storage" {
   is_hns_enabled           = true
 
   tags = local.tags
+
+  network_rules {
+    default_action = "Deny"
+    virtual_network_subnet_ids = [
+      azurerm_subnet.snet.id
+    ]
+  }
 }
+
 
 resource "random_password" "sql_admin_password" {
   length  = 16
@@ -73,6 +81,10 @@ resource "azurerm_mssql_server" "sql_server" {
   administrator_login_password = random_password.sql_admin_password.result
 
   tags = local.tags
+  network_rule {
+    action                    = "Allow"
+    virtual_network_subnet_id = azurerm_subnet.snet.id
+  }
 }
 
 resource "azurerm_mssql_database" "database" {
