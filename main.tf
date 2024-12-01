@@ -52,14 +52,13 @@ resource "azurerm_storage_account" "storage" {
   account_replication_type = "LRS"
   is_hns_enabled           = true
 
+  network_rules {
+    default_action             = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.snet.id]
+  }
+
   tags = local.tags
 
-  network_rules {
-    default_action = "Deny"
-    virtual_network_subnet_ids = [
-      azurerm_subnet.snet.id
-    ]
-  }
 }
 
 
@@ -81,10 +80,6 @@ resource "azurerm_mssql_server" "sql_server" {
   administrator_login_password = random_password.sql_admin_password.result
 
   tags = local.tags
-  network_rule {
-    action                    = "Allow"
-    virtual_network_subnet_id = azurerm_subnet.snet.id
-  }
 }
 
 resource "azurerm_mssql_database" "database" {
