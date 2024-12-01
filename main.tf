@@ -45,7 +45,7 @@ resource "azurerm_subnet" "snet" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "sto${random_integer.deployment_id_suffix.result}"
+  name                     = "stodsba6190ssharm68"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = var.location
   account_tier             = "Standard"
